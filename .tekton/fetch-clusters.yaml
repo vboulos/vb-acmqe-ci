@@ -35,8 +35,8 @@ spec:
         - name: HUB_OCP_USERNAME
         - name: HUB_OCP_PASSWORD
         - name: CI_GIT_BRANCH 
-      container:
-        image: quay.io/vboulos/acmqe-automation/python:latest
+      steps:
+      - image: quay.io/vboulos/acmqe-automation/python:latestquay.io/redhat-user-workloads/rhn-support-vboulos-tenant/acm-qe-ci/vb-fetch-clusters:sha256-6c7db2e642876277190595ff2040c235ded44d917cfd6634ecb66070290e3ba8.dockerfile
         env:
           - name: HUB_OCP_API_URL
             value: $(params.HUB_OCP_API_URL
@@ -47,7 +47,7 @@ spec:
           - name: CI_GIT_BRANCH
             value: $(params.CI_GIT_BRANCH)
         script: |
-            cd ci/scripts/helpers
+            cd scripts
             rm -rf managedClusters.json
             rm -rf hub* managed*
             
@@ -55,7 +55,7 @@ spec:
             oc login --insecure-skip-tls-verify -u $HUB_OCP_USERNAME -p $HUB_OCP_PASSWORD $HUB_OCP_API_URL
 
             source cluster_helpers.sh
-            # Get the Hub kubeconfig --> from ci/scripts/helpers/cluster_helpers.sh
+            # Get the Hub kubeconfig --> from scripts/cluster_helpers.sh
             # get_hub_kubeconfig
             ls $HOME/.kube
             cat $HOME/.kube/config > hub.kubeconfig
@@ -83,9 +83,9 @@ spec:
             # cat managedClusters.json |jq -r '.managedClusters[0].password' > managed.cluster.password
             # cat managed.cluster.password
 
-            # Get the Hub and the managed cluster kubeconfig --> from ci/scripts/helpers/cluster_helpers.sh
+            # Get the Hub and the managed cluster kubeconfig --> from scripts/cluster_helpers.sh
             get_managed_cluster_kubeconfig $(cat managed.cluster.name)
 
-            # Get the managed cluster password --> from ci/scripts/helpers/cluster_helpers.sh
+            # Get the managed cluster password --> from scripts/cluster_helpers.sh
             get_managed_cluster_password $(cat managed.cluster.name)
       
