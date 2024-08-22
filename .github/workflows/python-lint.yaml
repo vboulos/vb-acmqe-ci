@@ -1,0 +1,31 @@
+name: Python Linting
+
+on:
+  push:
+    branches:
+      - '*'  # Trigger on any push event
+  pull_request:
+    branches:
+      - '*' # Trigger on any push event
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Change this to the Python version you are using
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
+
+    - name: Run Flake8
+      run: |
+        flake8 --ignore=E402,E501,E128,F403,F405,W605  # Customize Flake8 options as needed
