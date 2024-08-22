@@ -1,0 +1,107 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: clc-ui-tests
+spec:
+  description: |
+    Cluster lifecylce test suite that provisons managed clusters, ks clusters, cluster pool and many more
+  params:
+    - description: 'Hub OCP API url'
+      name: CYPRESS_HUB_API_URL
+      type: string
+    - description: 'Hub OCP username'
+      name: CYPRESS_OPTIONS_HUB_USER
+      type: string
+    - description: 'Hub OCP password'
+      name: CYPRESS_OPTIONS_HUB_PASSWORD
+      type: string
+    - decription: 'The spoke public cloud providers you want to provision (aws, gcp, azure)'
+      name: CYPRESS_SPOKE_CLUSTER
+      type: string
+    - decription: 'The ocp image version used to provision (4.16.7, 4.15.10, etc.)'
+      name: CYPRESS_CLC_OCP_IMAGE_VERSION
+      type: string
+    - decription: 'The ocp image registry used to provision'
+      name: CYPRESS_CLC_OCP_IMAGE_REGISTRY
+      default: 'quay.io/openshift-release-dev/ocp-release'
+      type: string
+    - decription: 'The supported KS clusters (IKS,EKS,GKE,AKS,ROKS,ROSA-HCP,ROSA-CLASSIC,ARO,OSD,ARM,OCP311)'
+      name: IMPORT_KUBERNETES_CLUSTERS
+      default: ''
+      type: string
+    - decription: 'The tags when you want to run a subset of tests'
+      name: TEST_STAGE
+      default: 'postrelease-create'
+      type: string
+    - decription: 'Browser type (chrome, electron, firefox, edge)'
+      name: BROWSER
+      default: 'chrome'
+      type: string
+  tasks:
+    - name: clc-ui-test-suite
+      params:
+        - name: CYPRESS_HUB_API_URL
+          value: $(params.CYPRESS_HUB_API_URL)
+        - name: CYPRESS_OPTIONS_HUB_USER
+          value: $(params.CYPRESS_OPTIONS_HUB_USER)
+        - name: CYPRESS_OPTIONS_HUB_PASSWORD
+          value: $(params.CYPRESS_OPTIONS_HUB_PASSWORD)
+        - name: CYPRESS_SPOKE_CLUSTER
+          value: $(params.CYPRESS_SPOKE_CLUSTER)
+        - name: CYPRESS_CLC_OCP_IMAGE_VERSION
+          value: $(params.CYPRESS_CLC_OCP_IMAGE_VERSION)
+        - name: CYPRESS_CLC_OCP_IMAGE_REGISTRY
+          value: $(params.CYPRESS_CLC_OCP_IMAGE_REGISTRY)
+        - name: IMPORT_KUBERNETES_CLUSTERS
+          value: $(params.IMPORT_KUBERNETES_CLUSTERS)
+        - name: TEST_STAGE
+          value: $(params.TEST_STAGE)
+        - name: BROWSER
+          value: $(params.BROWSER) 
+      taskSpec:
+        params:
+        - name: CYPRESS_HUB_API_URL
+        - name: CYPRESS_OPTIONS_HUB_USER
+        - name: CYPRESS_OPTIONS_HUB_PASSWORD
+        - name: CYPRESS_SPOKE_CLUSTER
+        - name: CYPRESS_CLC_OCP_IMAGE_VERSION
+        - name: CYPRESS_CLC_OCP_IMAGE_REGISTRY
+        - name: IMPORT_KUBERNETES_CLUSTERS
+        - name: TEST_STAGE
+        - name: BROWSER  
+      container:
+        image: quay.io/vboulos/acmqe-automation/centos8-nodejs12
+        env:
+          - name: CYPRESS_HUB_API_URL
+            value: $(params.CYPRESS_HUB_API_URL)
+          - name: CYPRESS_OPTIONS_HUB_USER
+            value: $(params.CYPRESS_OPTIONS_HUB_USER)
+          - name: CYPRESS_OPTIONS_HUB_PASSWORD
+            value: $(params.CYPRESS_OPTIONS_HUB_PASSWORD)
+          - name: CYPRESS_SPOKE_CLUSTER
+            value: $(params.CYPRESS_SPOKE_CLUSTER)
+          - name: CYPRESS_CLC_OCP_IMAGE_VERSION
+            value: $(params.CYPRESS_CLC_OCP_IMAGE_VERSION)
+          - name: CYPRESS_CLC_OCP_IMAGE_REGISTRY
+            value: $(params.CYPRESS_CLC_OCP_IMAGE_REGISTRY)
+          - name: IMPORT_KUBERNETES_CLUSTERS
+            value: $(params.IMPORT_KUBERNETES_CLUSTERS)
+          - name: TEST_STAGE
+            value: $(params.TEST_STAGE)
+          - name: BROWSER
+            value: $(params.BROWSER)
+        script: |
+          if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
+              clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
+              echo $clusterName
+              /usr/local/bin/yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
+              clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
+              /usr/local/bin/yq e -i '.options.clusters.azure.clusterName="'"$clusterName"'"' options.yaml
+              clusterName=$(yq e '.options.clusters.gcp.clusterName' options.yaml)
+              /usr/local/bin/yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
+              clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
+              /usr/local/bin/yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
+              echo $clusterName
+          fi
+          bash -x ./start-tests.sh
+          cp -r reports $ARTIFACT_DIR/
