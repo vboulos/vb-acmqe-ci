@@ -8,15 +8,19 @@ spec:
   params:
     - description: 'Hub OCP API url'
       name: HUB_OCP_API_URL
+      default: 'https://api.ci-vb-2105z.az.dev09.red-chesterfield.com:6443'
       type: string
     - description: 'Hub OCP username'
       name: HUB_OCP_USERNAME
+      default: 'kubeadmin'
       type: string
     - description: 'Hub OCP password'
       name: HUB_OCP_PASSWORD
+      default: 'mxPZX-azth6-vXXG7-ZbHQ6'
       type: string
     - description: 'Git branch used by the CI to run e2e job'
       name: CI_GIT_BRANCH
+      default: 'main'
       type: string
   tasks:
     - name: fetch-clusters
