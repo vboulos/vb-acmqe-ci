@@ -6,9 +6,9 @@ set -o errexit
 set -o pipefail
 
 # OCP parameters
-export CYPRESS_OC_CLUSTER_USER=${HUB_OCP_USERNAME:-}
-export CYPRESS_OC_CLUSTER_PASS=${HUB_OCP_PASSWORD:-}
-export CYPRESS_OC_CLUSTER_URL=${HUB_OCP_API_URL:-}
+export HUB_OCP_USERNAME=${HUB_OCP_USERNAME:-}
+export HUB_OCP_PASSWORD=${HUB_OCP_PASSWORD:-}
+export HUB_OCP_API_URL=${HUB_OCP_API_URL:-}
 
 # Check if the OCP variables are provided
 if [[ -z $HUB_OCP_USERNAME || -z $HUB_OCP_PASSWORD ||  -z $HUB_OCP_API_URL ]]; then

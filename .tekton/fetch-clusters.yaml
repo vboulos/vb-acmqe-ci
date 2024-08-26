@@ -51,45 +51,8 @@ spec:
           - name: CI_GIT_BRANCH
             value: $(params.CI_GIT_BRANCH)  
           script: |
-            cd scripts
-            rm -rf managedClusters.json
-            rm -rf hub* managed*
-            
-            # Login into the Hub
-            oc login --insecure-skip-tls-verify -u $HUB_OCP_USERNAME -p $HUB_OCP_PASSWORD $HUB_OCP_API_URL
-
-            source cluster_helpers.sh
-            # Get the Hub kubeconfig --> from scripts/cluster_helpers.sh
-            # get_hub_kubeconfig
-            ls $HOME/.kube
-            cat $HOME/.kube/config > hub.kubeconfig
-
-            # Get the managed clusters
-            python3 generate_managedclusters_data.py
-            cat managedClusters.json |jq -r '.managedClusters[0].name' > managed.cluster.name
-            cat managed.cluster.name
-            
-            cat managedClusters.json |jq -r '.managedClusters[0].base_domain' > managed.cluster.base.domain
-            cat managed.cluster.base.domain
-
-            cat managedClusters.json |jq -r '.managedClusters[0].api_url' > managed.cluster.api.url
-            cat managed.cluster.api.url
-
-            cat managedClusters.json |jq -r '.managedClusters[0].username' > managed.cluster.username
-            username=$(cat managed.cluster.username)
-            if [[ -z $username || $username == 'null' || $username == '' ]]; then
-                # get_managed_cluster_user $(cat managed.cluster.name)
-                echo "######## Setting default username"
-                echo kubeadmin > managed.cluster.username
-                cat managed.cluster.username
-            fi
-
-            # cat managedClusters.json |jq -r '.managedClusters[0].password' > managed.cluster.password
-            # cat managed.cluster.password
-
-            # Get the Hub and the managed cluster kubeconfig --> from scripts/cluster_helpers.sh
-            get_managed_cluster_kubeconfig $(cat managed.cluster.name)
-
-            # Get the managed cluster password --> from scripts/cluster_helpers.sh
-            get_managed_cluster_password $(cat managed.cluster.name)
+            cd fetch-clusters
+            ls -al
+            ./fetch_clusters_commands.sh
+            ls -al
       
