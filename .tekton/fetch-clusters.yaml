@@ -41,6 +41,7 @@ spec:
         - name: CI_GIT_BRANCH 
         steps:
         - image: quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-v.1.0
+          imagePullPolicy: Always
           env:
           - name: HUB_OCP_API_URL
             value: $(params.HUB_OCP_API_URL)
