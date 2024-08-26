@@ -41,6 +41,15 @@ spec:
         - name: CI_GIT_BRANCH 
         steps:
         - image: quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-v.1.0
+          env:
+          - name: HUB_OCP_API_URL
+            value: $(params.HUB_OCP_API_URL
+          - name: HUB_OCP_USERNAME
+            value: $(params.HUB_OCP_USERNAME)
+          - name: HUB_OCP_PASSWORD
+            value: $(params.HUB_OCP_PASSWORD)
+          - name: CI_GIT_BRANCH
+            value: $(params.CI_GIT_BRANCH)  
           script: |
             cd scripts
             rm -rf managedClusters.json
