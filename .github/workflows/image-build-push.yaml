@@ -17,7 +17,7 @@ jobs:
         run: echo ::set-output name=branch_name::$(git rev-parse --abbrev-ref HEAD)
       - name: Build Docker Image
         run: |
-          docker build -t quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-${{ steps.branch_name.outputs.branch_name }} . --file ../../fetch-clusters/Dockerfile
+          docker build -t quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-${{ steps.branch_name.outputs.branch_name }} . --file fetch-clusters/Dockerfile
       - name: Log in to Docker Registry
         run: |
           docker login quay.io -u ${{ secrets.QUAY_USER }} -p ${{ secrets.QUAY_PASSWORD }}
