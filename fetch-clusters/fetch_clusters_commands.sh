@@ -3,7 +3,7 @@
 
 set -o nounset
 set -o errexit
-set -o pipefail
+#set -o pipefail
 
 # OCP parameters
 export HUB_OCP_USERNAME=${HUB_OCP_USERNAME:-}
@@ -17,11 +17,11 @@ if [[ -z $HUB_OCP_USERNAME || -z $HUB_OCP_PASSWORD ||  -z $HUB_OCP_API_URL ]]; t
 fi
 
 # echo off
-set +x 
+# set +x 
 # Login to the Hub cluster
 oc login --insecure-skip-tls-verify -u $HUB_OCP_USERNAME -p $HUB_OCP_PASSWORD $HUB_OCP_API_URL
 # echo on
-set -x
+# set -x
 
 # Run the script that gets the manmaged clusters created on the Hub
 python3 generate_managedclusters_data.py
