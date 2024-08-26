@@ -8,15 +8,15 @@ spec:
   params:
     - description: 'Hub OCP API url'
       name: HUB_OCP_API_URL
-      default: 'https://api.ci-vb-2105z.az.dev09.red-chesterfield.com:6443'
+      default: 'https://api.ci-vb-hcptr17.0qwz.p3.openshiftapps.com:443'
       type: string
     - description: 'Hub OCP username'
       name: HUB_OCP_USERNAME
-      default: 'kubeadmin'
+      default: 'cluster-admin'
       type: string
     - description: 'Hub OCP password'
       name: HUB_OCP_PASSWORD
-      default: 'mxPZX-azth6-vXXG7-ZbHQ6'
+      default: '4QRmT-Rc2AT-6vdNN-a6MYL'
       type: string
     - description: 'Git branch used by the CI to run e2e job'
       name: CI_GIT_BRANCH
@@ -26,7 +26,7 @@ spec:
     - name: fetch-clusters
       params:
         - name: HUB_OCP_API_URL
-          value: $(params.HUB_OCP_API_URL
+          value: $(params.HUB_OCP_API_URL)
         - name: HUB_OCP_USERNAME
           value: $(params.HUB_OCP_USERNAME)
         - name: HUB_OCP_PASSWORD
@@ -41,6 +41,15 @@ spec:
         - name: CI_GIT_BRANCH 
         steps:
         - image: quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-v.1.0
+          env:
+          - name: HUB_OCP_API_URL
+            value: $(params.HUB_OCP_API_URL)
+          - name: HUB_OCP_USERNAME
+            value: $(params.HUB_OCP_USERNAME)
+          - name: HUB_OCP_PASSWORD
+            value: $(params.HUB_OCP_PASSWORD)
+          - name: CI_GIT_BRANCH
+            value: $(params.CI_GIT_BRANCH)  
           script: |
             cd scripts
             rm -rf managedClusters.json
