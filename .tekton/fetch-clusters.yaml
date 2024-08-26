@@ -15,7 +15,7 @@ spec:
     - description: 'Hub OCP password'
       name: HUB_OCP_PASSWORD
       type: string
-    - decription: 'Git branch used by the CI to run e2e job'
+    - description: 'Git branch used by the CI to run e2e job'
       name: CI_GIT_BRANCH
       type: string
   tasks:
