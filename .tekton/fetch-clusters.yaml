@@ -40,7 +40,7 @@ spec:
         - name: HUB_OCP_PASSWORD
         - name: CI_GIT_BRANCH 
         steps:
-        - image: quay.io/vboulos/acmqe-automation/python:latestquay.io/redhat-user-workloads/rhn-support-vboulos-tenant/acm-qe-ci/vb-fetch-clusters:sha256-6c7db2e642876277190595ff2040c235ded44d917cfd6634ecb66070290e3ba8.dockerfile
+        - image: quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-v.1.0
           env:
           - name: HUB_OCP_API_URL
             value: $(params.HUB_OCP_API_URL

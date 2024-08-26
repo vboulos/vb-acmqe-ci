@@ -1,5 +1,5 @@
 # Build image
-# docker build -t quay.io/vboulos/acmqe-automation/fetch-managed-clusters -f ci/containerimages/fetch-managed-clusters/Dockerfile .
+# docker build --platform linux/amd64 -t quay.io/vboulos/acmqe-automation/fetch-clusters:fetch-v.1.0 -f fetch-clusters/Dockerfile .
 
 FROM python:latest
 
