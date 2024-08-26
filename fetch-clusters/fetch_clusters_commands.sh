@@ -5,6 +5,7 @@ set -o nounset
 set -o errexit
 # set -o pipefail
 
+
 # OCP parameters
 export HUB_OCP_USERNAME=${HUB_OCP_USERNAME:-}
 export HUB_OCP_PASSWORD=${HUB_OCP_PASSWORD:-}
