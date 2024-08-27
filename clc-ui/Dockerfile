@@ -103,8 +103,8 @@ WORKDIR /tmp/clc/${GIT_BRANCH}
 ENV CYPRESS_CACHE_FOLDER=/tmp/.cache/Cypress
 
 # Install node packages and update browsers list
-RUN npm config set unsafe-perm true \
-    && npm config set loglevel warn \
+# RUN npm config set unsafe-perm true \
+RUN npm config set loglevel warn \
     && npm install -g\
     && npm ci \
     && npx browserslist@latest --update-db
