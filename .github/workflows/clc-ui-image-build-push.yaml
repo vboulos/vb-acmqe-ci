@@ -1,0 +1,29 @@
+name: Build and Push Docker Image on PR Merge
+
+on:
+    push:
+  #pull_request:
+    #types: [closed]
+        branches:
+        - 'release-*' 
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get Branch Name
+        id: branch_name
+        run: echo ::set-output name=branch_name::$(git rev-parse --abbrev-ref HEAD)
+      - name: Build Docker Image
+        run: |
+          docker build --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}  --build-arg GITHUB_USER=${{ secrets.GITHUB_USER }} GIT_BRANCH=${{ steps.branch_name.outputs.branch_name }} -t quay.io/vboulos/acmqe-automation/clc-ui:${{ steps.branch_name.outputs.branch_name }} . --file clc-ui/Dockerfile .
+      - name: Log in to Docker Registry
+        run: |
+          docker login quay.io -u ${{ secrets.QUAY_USER }} -p ${{ secrets.QUAY_PASSWORD }}
+      - name: Push Docker Image
+        run: docker push quay.io/vboulos/acmqe-automation/clc-ui:${{ steps.branch_name.outputs.branch_name }}
+      - name: Verify Image Pushed
+        run: |
+          docker pull quay.io/vboulos/acmqe-automation/clc-ui:${{ steps.branch_name.outputs.branch_name }}
+          echo "Image pushed successfully!"
