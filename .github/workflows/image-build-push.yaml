@@ -6,7 +6,8 @@ on:
     #types: [closed]
         branches:
         - 'release-*' 
-
+        - 'main'
+        
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
