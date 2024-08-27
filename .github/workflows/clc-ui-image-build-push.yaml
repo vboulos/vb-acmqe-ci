@@ -17,7 +17,7 @@ jobs:
         run: echo ::set-output name=branch_name::$(git rev-parse --abbrev-ref HEAD)
       - name: Build Docker Image
         run: |
-          docker build \
+          docker build  \
           --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
           --build-arg GITHUB_USER=${{ secrets.QUAY_USER }} \
           --build-arg GIT_BRANCH=${{ steps.branch_name.outputs.branch_name }} \ 
