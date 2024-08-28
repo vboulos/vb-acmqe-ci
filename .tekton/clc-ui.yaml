@@ -116,20 +116,20 @@ spec:
               secretKeyRef:
                 name: clc-options-yaml
                 key: OPTIONS_YAML     
-        script: |
-          cat $OPTIONS_FILE > options.yaml
-                            chmod 777 options.yaml
-          if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
-              clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
-              echo $clusterName
-              /usr/local/bin/yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
-              clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
-              /usr/local/bin/yq e -i '.options.clusters.azure.clusterName="'"$clusterName"'"' options.yaml
-              clusterName=$(yq e '.options.clusters.gcp.clusterName' options.yaml)
-              /usr/local/bin/yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
-              clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
-              /usr/local/bin/yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
-              echo $clusterName
-          fi
-          bash -x ./start-tests.sh
-          cp -r reports $ARTIFACT_DIR/
+          script: |
+            cat $OPTIONS_FILE > options.yaml
+                              chmod 777 options.yaml
+            if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
+                clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
+                echo $clusterName
+                /usr/local/bin/yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.azure.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.gcp.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
+                echo $clusterName
+            fi
+            bash -x ./start-tests.sh
+            cp -r` reports $ARTIFACT_DIR/
