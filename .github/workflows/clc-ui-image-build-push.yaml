@@ -5,9 +5,9 @@ on:
   #pull_request:
     #types: [closed]
         branches:
-        - 'release-*' 
-        - 'main'
-        
+        - 'release-*'
+        - 'main' 
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -18,13 +18,18 @@ jobs:
         run: echo ::set-output name=branch_name::$(git rev-parse --abbrev-ref HEAD)
       - name: Build Docker Image
         run: |
-          docker build -t quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-${{ steps.branch_name.outputs.branch_name }} . --file fetch-clusters/Dockerfile
+          docker build \
+            --build-arg GITHUB_TOKEN=${{ secrets.MY_GITHUB_TOKEN }} \
+            --build-arg GITHUB_USER=${{ secrets.QUAY_USER }} \
+            --build-arg GIT_BRANCH=${{ steps.branch_name.outputs.branch_name }} \
+            -t quay.io/vboulos/acmqe-automation/clc-ui:${{ steps.branch_name.outputs.branch_name }} \
+            --file ./clc-ui/Dockerfile .
       - name: Log in to Docker Registry
         run: |
           docker login quay.io -u ${{ secrets.QUAY_USER }} -p ${{ secrets.QUAY_PASSWORD }}
       - name: Push Docker Image
-        run: docker push quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-${{ steps.branch_name.outputs.branch_name }}
+        run: docker push quay.io/vboulos/acmqe-automation/clc-ui:${{ steps.branch_name.outputs.branch_name }}
       - name: Verify Image Pushed
         run: |
-          docker pull quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-${{ steps.branch_name.outputs.branch_name }}
+          docker pull quay.io/vboulos/acmqe-automation/clc-ui:${{ steps.branch_name.outputs.branch_name }}
           echo "Image pushed successfully!"

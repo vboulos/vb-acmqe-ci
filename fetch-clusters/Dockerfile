@@ -17,5 +17,5 @@ RUN chmod +x fetch-clusters/fetch_clusters_commands.sh
 # Set required permissions for OpenShift usage
 RUN chgrp -R 0 /tmp && \
     chmod -R g=u /tmp
-
+    
 CMD ["/bin/bash"]
