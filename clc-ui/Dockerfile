@@ -5,6 +5,7 @@
 
 FROM quay.io/vboulos/acmqe-automation/clc-ui:main
 
-CMD ["/bin/bash"]
+RUN echo "runniing"
 
+CMD ["/bin/bash"]
 
