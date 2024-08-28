@@ -44,9 +44,9 @@
         - name: groovy file lint 
           uses: actions/setup-node@v3
           with:
-            node-version: 18
+            node-version: 21
         - run: |
-            npm install -g npm-groovy-lint 
+            npm install -g npm-groovy-lint@14.6.0
             npm-groovy-lint --failon error ci/jenkinsfiles/vars/*.groovy --loglevel warning
             npm-groovy-lint --failon error ci/jenkinsfiles/*.jenkinsfiles
             

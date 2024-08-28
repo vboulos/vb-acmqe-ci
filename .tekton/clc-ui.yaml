@@ -8,18 +8,23 @@ spec:
   params:
     - description: 'Hub OCP API url'
       name: CYPRESS_HUB_API_URL
+      default: 'https://api.ci-vb-hcptr17.0qwz.p3.openshiftapps.com:443'
       type: string
     - description: 'Hub OCP username'
       name: CYPRESS_OPTIONS_HUB_USER
+      default: 'cluster-admin'
       type: string
     - description: 'Hub OCP password'
       name: CYPRESS_OPTIONS_HUB_PASSWORD
+      default: '4QRmT-Rc2AT-6vdNN-a6MYL'
       type: string
     - decription: 'The spoke public cloud providers you want to provision (aws, gcp, azure)'
       name: CYPRESS_SPOKE_CLUSTER
+      default: 'aws'
       type: string
     - decription: 'The ocp image version used to provision (4.16.7, 4.15.10, etc.)'
       name: CYPRESS_CLC_OCP_IMAGE_VERSION
+      default: '4.16.6'
       type: string
     - decription: 'The ocp image registry used to provision'
       name: CYPRESS_CLC_OCP_IMAGE_REGISTRY
@@ -69,9 +74,10 @@ spec:
         - name: IMPORT_KUBERNETES_CLUSTERS
         - name: TEST_STAGE
         - name: BROWSER  
-      container:
-        image: quay.io/vboulos/acmqe-automation/centos8-nodejs12
-        env:
+        steps:
+        - image: quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-v.1.0
+          imagePullPolicy: Always
+          env:
           - name: CYPRESS_HUB_API_URL
             value: $(params.CYPRESS_HUB_API_URL)
           - name: CYPRESS_OPTIONS_HUB_USER
@@ -91,6 +97,8 @@ spec:
           - name: BROWSER
             value: $(params.BROWSER)
         script: |
+          cat $OPTIONS_FILE > options.yaml
+                            chmod 777 options.yaml
           if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
               clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
               echo $clusterName
