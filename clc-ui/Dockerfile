@@ -96,7 +96,7 @@ RUN dnf clean all
 RUN mkdir /tmp/clc
 WORKDIR /tmp/clc
 RUN echo ${GIT_BRANCH} 
-RUN git clone -b ${GIT_BRANCH} -c http.sslVerify=false https://oauth2:${MY_GITHUB_TOKEN}@github.com/stolostron/clc-ui-e2e.git ${GIT_BRANCH}
+RUN git clone -b ${GIT_BRANCH} https://oauth2:${MY_GITHUB_TOKEN}@github.com/stolostron/clc-ui-e2e.git ${GIT_BRANCH}
 RUN ls -al
 WORKDIR /tmp/clc/${GIT_BRANCH}
 
