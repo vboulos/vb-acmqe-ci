@@ -95,9 +95,9 @@ RUN dnf clean all
 # Copy the CLC repo repo into /tmp/clc folder
 RUN mkdir /tmp/clc
 WORKDIR /tmp/clc
-RUN git clone -b ${GIT_BRANCH} https://oauth2:${GITHUB_TOKEN}@github.com/stolostron/clc-ui-e2e.git $GIT_BRANCH
+RUN git clone -b ${GIT_BRANCH} https://oauth2:${GITHUB_TOKEN}@github.com/stolostron/clc-ui-e2e.git
 RUN ls -al
-WORKDIR /tmp/clc/${GIT_BRANCH}
+WORKDIR /tmp/clc/clc-ui-e2e
 
 # point Cypress at the /tmp/cache no matter what user account is used
 # see https://on.cypress.io/caching
