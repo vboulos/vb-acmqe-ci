@@ -98,7 +98,6 @@ WORKDIR /tmp/clc
 RUN echo ${GIT_BRANCH} 
 RUN git clone -b ${GIT_BRANCH} -c http.sslVerify=false https://oauth2:${GITHUB_TOKEN}@github.com/stolostron/clc-ui-e2e.git ${GIT_BRANCH}
 RUN ls -al
-# WORKDIR /tmp/clc/clc-ui-e2e
 WORKDIR /tmp/clc/${GIT_BRANCH}
 
 # point Cypress at the /tmp/cache no matter what user account is used
