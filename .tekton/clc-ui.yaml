@@ -96,6 +96,26 @@ spec:
             value: $(params.TEST_STAGE)
           - name: BROWSER
             value: $(params.BROWSER)
+          - name: MY_GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: vincent-secrets
+                key: MY_GITHUB_TOKEN
+          - name: GIT_BRANCH
+            valueFrom:
+              secretKeyRef:
+                name: vincent-secrets
+                key: GIT_BRANCH
+          - name: GITHUB_USER
+            valueFrom:
+              secretKeyRef:
+                name: vincent-secrets
+                key: GITHUB_USER
+          - name: OPTIONS_FILE
+            valueFrom:
+              secretKeyRef:
+                name: clc-options-yaml
+                key: OPTIONS_YAML     
         script: |
           cat $OPTIONS_FILE > options.yaml
                             chmod 777 options.yaml
