@@ -75,7 +75,7 @@ spec:
         - name: TEST_STAGE
         - name: BROWSER  
         steps:
-        - image: quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-v.1.0
+        - image: quay.io/vboulos/acmqe-automation/clc-ui:main
           imagePullPolicy: Always
           env:
           - name: CYPRESS_HUB_API_URL

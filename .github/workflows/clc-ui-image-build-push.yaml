@@ -19,7 +19,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build \
-            --build-arg GITHUB_TOKEN=${{ secrets.MY_GITHUB_TOKEN }} \
+            --build-arg MY_GITHUB_TOKEN=${{ secrets.MY_GITHUB_TOKEN }} \
             --build-arg GITHUB_USER=${{ secrets.QUAY_USER }} \
             --build-arg GIT_BRANCH=${{ steps.branch_name.outputs.branch_name }} \
             -t quay.io/vboulos/acmqe-automation/clc-ui:${{ steps.branch_name.outputs.branch_name }} \
