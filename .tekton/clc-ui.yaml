@@ -118,7 +118,7 @@ spec:
                 key: OPTIONS_YAML     
           script: |
             ls -al
-            cat $OPTIONS_FILE > options.yaml
+            echo $OPTIONS_FILE > options.yaml
             chmod 777 options.yaml
             if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
                 clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
