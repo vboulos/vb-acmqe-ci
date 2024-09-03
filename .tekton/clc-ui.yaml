@@ -124,50 +124,50 @@ spec:
             ls -al
             cat options.yaml
             chmod 777 options.yaml
-            # if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
-            #     clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
-            #     echo "###clusterName"
-            #     echo $clusterName
-            #     /usr/local/bin/yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
-            #     clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
-            #     /usr/local/bin/yq e -i '.options.clusters.azure.clusterName="'"$clusterName"'"' options.yaml
-            #     clusterName=$(yq e '.options.clusters.gcp.clusterName' options.yaml)
-            #     /usr/local/bin/yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
-            #     clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
-            #     /usr/local/bin/yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
-            #     echo $clusterName
-            # fi
-
-
-            # Check if TEST_STAGE matches specific values
-            if [[ "$TEST_STAGE" == "all" || "$TEST_STAGE" == "create" || "$TEST_STAGE" == "preupgrade" || "$TEST_STAGE" == "postupgrade" || "$TEST_STAGE" == "postrelease-create" || "$TEST_STAGE" == "OCPInterop-create" ]]; then
-
-              # Get cluster names for all supported cloud providers
-              clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
-              echo "### AWS clusterName"
-              echo "$clusterName"
-
-              yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
-
-              clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
-              echo "### Azure clusterName"
-              echo "$clusterName"
-
-              yq e -i '.options.clusters.azure.clusterName="'"$clusterName"'"' options.yaml
-
-              clusterName=$(yq e '.options.clusters.gcp.clusterName' options.yaml)
-              echo "### GCP clusterName"
-              echo "$clusterName"
-
-              yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
-
-              clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
-              echo "### AZGov clusterName"
-              echo "$clusterName"
-
-              yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
-
+            if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
+                clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
+                echo "###clusterName"
+                echo $clusterName
+                /usr/local/bin/yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.azure.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.gcp.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
+                echo $clusterName
             fi
+
+
+            # # Check if TEST_STAGE matches specific values
+            # if [[ "$TEST_STAGE" == "all" || "$TEST_STAGE" == "create" || "$TEST_STAGE" == "preupgrade" || "$TEST_STAGE" == "postupgrade" || "$TEST_STAGE" == "postrelease-create" || "$TEST_STAGE" == "OCPInterop-create" ]]; then
+
+            #   # Get cluster names for all supported cloud providers
+            #   clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
+            #   echo "### AWS clusterName"
+            #   echo "$clusterName"
+
+            #   yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
+
+            #   clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
+            #   echo "### Azure clusterName"
+            #   echo "$clusterName"
+
+            #   yq e -i '.options.clusters.azure.clusterName="'"$clusterName"'"' options.yaml
+
+            #   clusterName=$(yq e '.options.clusters.gcp.clusterName' options.yaml)
+            #   echo "### GCP clusterName"
+            #   echo "$clusterName"
+
+            #   yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
+
+            #   clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
+            #   echo "### AZGov clusterName"
+            #   echo "$clusterName"
+
+            #   yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
+
+            # fi
 
 
             # export DISPLAY=:99
