@@ -114,8 +114,8 @@ spec:
           - name: OPTIONS_FILE
             valueFrom:
               secretKeyRef:
-                name: clc-options-yaml
-                key: OPTIONS_YAML     
+                name: clc-options-yaml-file
+                key: CLC_OPTIONS_YAML     
           script: |
             ls -al
             echo $OPTIONS_FILE
