@@ -118,8 +118,8 @@ spec:
                 key: CLC_OPTIONS_YAML     
           script: |
             ls -al
-            echo $OPTIONS_FILE
-            echo $OPTIONS_FILE > options.yaml
+            echo ${OPTIONS_FILE}
+            echo ${OPTIONS_FILE} > options.yaml
             echo "debug options.yaml"
             ls -al
             cat options.yaml
@@ -170,7 +170,7 @@ spec:
             fi
 
 
-            export DISPLAY=:99
-            Xvfb :99 -screen 0 1024x768x16 2>/dev/null &
+            # export DISPLAY=:99
+            # Xvfb :99 -screen 0 1024x768x16 2>/dev/null &
             bash -x ./start-tests.sh
             cp -r reports ../clc/
