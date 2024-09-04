@@ -132,6 +132,6 @@ RUN chgrp -R 0 /.config && \
 ENV TERM=xterm
 
 
-CMD ["/bin/bash"]
+#CMD ["/bin/bash"]
 
 
