@@ -122,7 +122,7 @@ spec:
             # echo ${OPTIONS_FILE} > options.yaml
             echo "debug options.yaml"
             ls -al
-            cat ${OPTIONS_FILE}
+            # cat ${OPTIONS_FILE}
             # cat options.yaml
             # chmod 777 options.yaml
             # if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
