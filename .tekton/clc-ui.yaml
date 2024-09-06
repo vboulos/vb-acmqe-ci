@@ -120,16 +120,17 @@ spec:
             ls -al
             echo ${OPTIONS_FILE}
             # echo ${OPTIONS_FILE} > options.yaml
+            cat "${OPTIONS_FILE}"" > options.yaml
             
             # Use printf to preserve formatting
-            printf '%s\n' ${OPTIONS_FILE} > options.yaml
+            # printf '%s\n' ${OPTIONS_FILE} > options.yaml
             
             echo "debug options.yaml"
-            echo ${OPTIONS_FILE}
+            # echo ${OPTIONS_FILE}
             ls -al
             
             # cat ${OPTIONS_FILE}
-            # cat options.yaml
+            cat options.yaml
             chmod 777 options.yaml
             if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
                 clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
