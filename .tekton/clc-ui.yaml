@@ -120,7 +120,7 @@ spec:
             ls -al
             # echo ${OPTIONS_FILE}
             # echo ${OPTIONS_FILE} > options.yaml
-            cat "${OPTIONS_FILE}" > options.yaml
+            cat $OPTIONS_FILE > options.yaml
             
             # Use printf to preserve formatting
             # printf '%s\n' ${OPTIONS_FILE} > options.yaml
