@@ -180,5 +180,5 @@ spec:
 
             export DISPLAY=:99
             Xvfb :99 -screen 0 1024x768x16 2>/dev/null &
-            sudo bash -x ./start-tests.sh
+            su bash -x ./start-tests.sh
             cp -r reports ../clc/
