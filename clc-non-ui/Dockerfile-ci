@@ -1,0 +1,47 @@
+# go1.22-linux is built as arm64, therefore we need to build our image as amd64 for this image to work on our Agents that has the docker host as amd64
+# docker build --platform linux/amd64 -t quay.io/stolostron/acm-qe:go1.22-ginkgo2.20.0 -f Dockerfile.go1.22-ginkgo2.20.0 .
+
+FROM registry.ci.openshift.org/stolostron/builder:go1.22-linux
+
+ARG MY_GITHUB_TOKEN
+ARG GITHUB_USER
+ARG GIT_BRANCH
+
+# install oc into build image
+RUN curl -fksSL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz | tar -xvz -C /usr/local/bin/ oc
+RUN wget https://github.com/mikefarah/yq/releases/download/v4.13.2/yq_linux_amd64 -O /usr/local/bin/yq && chmod +x /usr/local/bin/yq
+
+# compile go tests in build image
+RUN go install github.com/onsi/ginkgo/v2/ginkgo@v2.20.0
+
+# Copy the CLC non-ui repo into /tmp/clc-non-ui folder
+RUN mkdir /tmp/clc-non-ui
+WORKDIR /tmp/clc-non-ui
+# Copy the CLC repo repo into /tmp/clc folder
+WORKDIR /tmp/clc-non-ui
+RUN echo ${GIT_BRANCH} 
+RUN git clone -b ${GIT_BRANCH} https://oauth2:${MY_GITHUB_TOKEN}@github.com/stolostron/acmqe-clc-test.git ${GIT_BRANCH}
+RUN ls -al
+WORKDIR /tmp/clc-non-ui/${GIT_BRANCH}
+
+# good colors for most applications
+ENV TERM=xterm
+
+# Set required permissions for OpenShift usage
+RUN chgrp -R 0 /tmp && \
+    chmod -R g=u /tmp
+
+RUN mkdir -p /go
+RUN chgrp -R 0 /go && \
+    chmod -R g=u /go
+
+RUN mkdir -p ~/.kube
+RUN chgrp -R 0 ~/.kube && \
+    chmod -R g=u ~/.kube
+
+RUN mkdir -p /alabama/.kube
+RUN chgrp -R 0 /alabama/.kube && \
+    chmod -R g=u /alabama/.kube
+
+
+CMD ["/bin/bash"]

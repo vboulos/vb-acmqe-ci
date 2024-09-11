@@ -1,0 +1,27 @@
+FROM quay.io/vboulos/acmqe-automation/go:go1.21-ginkgo2.17.1
+
+# Copy the CLC non-ui repo into /tmp/clc-non-ui folder
+RUN mkdir /tmp/clc-non-ui
+WORKDIR /tmp/clc-non-ui
+COPY . .
+
+# good colors for most applications
+ENV TERM=xterm
+
+# Set required permissions for OpenShift usage
+RUN chgrp -R 0 /tmp && \
+    chmod -R g=u /tmp
+
+RUN mkdir -p /go
+RUN chgrp -R 0 /go && \
+    chmod -R g=u /go
+
+RUN mkdir -p ~/.kube
+RUN chgrp -R 0 ~/.kube && \
+    chmod -R g=u ~/.kube
+
+RUN mkdir -p /alabama/.kube
+RUN chgrp -R 0 /alabama/.kube && \
+    chmod -R g=u /alabama/.kube
+
+CMD ["/bin/bash"]

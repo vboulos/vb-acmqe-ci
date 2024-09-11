@@ -1,0 +1,147 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: clc-non-ui-tests
+spec:
+  description: |
+    Cluster lifecylce non-ui test suite that provisons managed clusters, ks clusters, cluster pool and many more
+  params:
+    - description: 'Hub OCP API url'
+      name: OCP_HUB_CLUSTER_API_URL
+      default: 'https://api.qe3-vmware-ibm.dev09.red-chesterfield.com:6443'
+      type: string
+    - description: 'Hub OCP username'
+      name: OCP_HUB_CLUSTER_USER
+      default: 'kubeadmin'
+      type: string
+    - description: 'Hub OCP password'
+      name: OCP_HUB_CLUSTER_PASSWORD
+      default: 'sRTjS-4BTuP-2MnDJ-SNnC9'
+      type: string
+    - description: 'The spoke public cloud providers you want to provision (aws, gcp, azure)'
+      name: CLOUD_PROVIDERS
+      default: 'aws'
+      type: string
+    - description: 'The ocp image version used to provision (4.16.7, 4.15.10, etc.)'
+      name: CLC_OCP_IMAGE_VERSION
+      default: '4.16.10'
+      type: string
+    - description: 'The ocp image registry used to provision'
+      name: CLC_OCP_IMAGE_REGISTRY
+      default: 'quay.io/openshift-release-dev/ocp-release'
+      type: string
+    - description: 'The supported KS clusters (IKS,EKS,GKE,AKS,ROKS,ROSA-HCP,ROSA-CLASSIC,ARO,OSD,ARM,OCP311)'
+      name: IMPORT_KUBERNETES_CLUSTERS
+      default: ''
+      type: string
+    - description: 'The tags when you want to run a subset of tests'
+      name: TEST_STAGE
+      default: 'create'
+      type: string
+  tasks:
+    - name: clc-non-ui-test-suite
+      params:
+        - name: OCP_HUB_CLUSTER_API_URL
+          value: $(params.OCP_HUB_CLUSTER_API_URL)
+        - name: OCP_HUB_CLUSTER_USER
+          value: $(params.OCP_HUB_CLUSTER_USER)
+        - name: OCP_HUB_CLUSTER_PASSWORD
+          value: $(params.OCP_HUB_CLUSTER_PASSWORD)
+        - name: CLOUD_PROVIDERS
+          value: $(params.CLOUD_PROVIDERS)
+        - name: CLC_OCP_IMAGE_VERSION
+          value: $(params.CLC_OCP_IMAGE_VERSION)
+        - name: CLC_OCP_IMAGE_REGISTRY
+          value: $(params.CLC_OCP_IMAGE_REGISTRY)
+        - name: IMPORT_KUBERNETES_CLUSTERS
+          value: $(params.IMPORT_KUBERNETES_CLUSTERS)
+        - name: TEST_STAGE
+          value: $(params.TEST_STAGE) 
+      taskSpec:
+        params:
+        - name: OCP_HUB_CLUSTER_API_URL
+        - name: OCP_HUB_CLUSTER_USER
+        - name: OCP_HUB_CLUSTER_PASSWORD
+        - name: CLOUD_PROVIDERS
+        - name: CLC_OCP_IMAGE_VERSION
+        - name: CLC_OCP_IMAGE_REGISTRY
+        - name: IMPORT_KUBERNETES_CLUSTERS
+        - name: TEST_STAGE 
+        steps:
+        - image: quay.io/vboulos/acmqe-automation/clc-non-ui:main
+          imagePullPolicy: Always
+          env:
+          - name: OCP_HUB_CLUSTER_API_URL
+            value: $(params.OCP_HUB_CLUSTER_API_URL)
+          - name: OCP_HUB_CLUSTER_USER
+            value: $(params.OCP_HUB_CLUSTER_USER)
+          - name: OCP_HUB_CLUSTER_PASSWORD
+            value: $(params.OCP_HUB_CLUSTER_PASSWORD)
+          - name: CLOUD_PROVIDERS
+            value: $(params.CLOUD_PROVIDERS)
+          - name: CLC_OCP_IMAGE_VERSION
+            value: $(params.CLC_OCP_IMAGE_VERSION)
+          - name: CLC_OCP_IMAGE_REGISTRY
+            value: $(params.CLC_OCP_IMAGE_REGISTRY)
+          - name: IMPORT_KUBERNETES_CLUSTERS
+            value: $(params.IMPORT_KUBERNETES_CLUSTERS)
+          - name: TEST_STAGE
+            value: $(params.TEST_STAGE) 
+          - name: MY_GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: vincent-secrets
+                key: MY_GITHUB_TOKEN
+          - name: GIT_BRANCH
+            valueFrom:
+              secretKeyRef:
+                name: vincent-secrets
+                key: GIT_BRANCH
+          - name: GITHUB_USER
+            valueFrom:
+              secretKeyRef:
+                name: vincent-secrets
+                key: GITHUB_USER
+          - name: OPTIONS_FILE
+            valueFrom:
+              secretKeyRef:
+                name: clc-options-yaml-file-2
+                key: CLC_OPTIONS_YAML     
+          script: |
+            ls -al
+            # echo ${OPTIONS_FILE}
+            echo ${OPTIONS_FILE} > options.yaml
+      
+            echo "debug options.yaml"
+            # echo ${OPTIONS_FILE}
+            ls -al
+            shopt -s extglob
+            chmod 777 options.yaml
+            if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
+                clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
+                echo "###clusterName"
+                echo $clusterName
+                /usr/local/bin/yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.azure.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.gcp.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
+                echo $clusterName
+            fi
+
+            rm -rf ./hub_kubeconfig
+            mkdir -p {hub_kubeconfig,results}
+            git config --global url.https://$GH_TOKEN@github.com/stolostron/acmqe-go-library.insteadOf https://github.com/stolostron/acmqe-go-library
+            export JUNIT_REPORT_FILE=$(pwd)/results/create_cluster_result.xml
+            set +x
+            KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig oc login --insecure-skip-tls-verify -u $OCP_HUB_CLUSTER_USER -p $OCP_HUB_CLUSTER_PASSWORD $OCP_HUB_CLUSTER_API_URL
+            set -x
+
+            if [[ $STEST_STAGE == "destroy" ]]; then
+                KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/destroy_cluster -v=1
+            else
+                KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/create_cluster -- -options=../../../options.yaml -v=1
+            fi
+            cp -r reports ../clc/
