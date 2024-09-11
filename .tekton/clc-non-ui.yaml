@@ -148,6 +148,7 @@ spec:
             if [[ $STEST_STAGE == "destroy" ]]; then
                 KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/destroy_cluster -v=1
             else
-                KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/create_cluster -- -options=../../../options.yaml -v=1
+                # KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/create_cluster -- -options=../../../options.yaml -v=1
+                KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/create_cluster -- -options=options.yaml -v=1
             fi
             cp -r reports ../clc/
