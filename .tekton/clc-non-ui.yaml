@@ -102,6 +102,11 @@ spec:
               secretKeyRef:
                 name: vincent-secrets
                 key: GITHUB_USER
+          - name: GH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: clc-github-token
+                key: GH_TOKEN
           - name: OPTIONS_FILE
             valueFrom:
               secretKeyRef:
