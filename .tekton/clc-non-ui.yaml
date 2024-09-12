@@ -146,6 +146,7 @@ spec:
                 clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
                 /usr/local/bin/yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
                 # clusterName='acmqe-ci-konflux'
+                 echo "ClusterName: ###################"
                 echo $clusterName
             fi
 
@@ -160,6 +161,7 @@ spec:
             if [[ $STEST_STAGE == "destroy" ]]; then
                 KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/destroy_cluster -v=1
             else
+                echo "create cluster"
                 # KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/create_cluster -- -options=../../../options.yaml -v=1
             fi
             ls -al 
