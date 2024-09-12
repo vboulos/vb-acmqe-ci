@@ -135,17 +135,17 @@ spec:
             shopt -s extglob
             chmod 777 options.yaml
             if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
-                # clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
-                # echo "###clusterName"
-                # echo $clusterName
-                # /usr/local/bin/yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
-                # clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
-                # /usr/local/bin/yq e -i '.options.clusters.azure.clusterName="'"$clusterName"'"' options.yaml
-                # clusterName=$(yq e '.options.clusters.gcp.clusterName' options.yaml)
-                # /usr/local/bin/yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
-                # clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
-                # /usr/local/bin/yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
-                clusterName='acmqe-ci-konflux'
+                clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
+                echo "###clusterName"
+                echo $clusterName
+                /usr/local/bin/yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.azure.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.gcp.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
+                clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
+                /usr/local/bin/yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
+                # clusterName='acmqe-ci-konflux'
                 echo $clusterName
             fi
 
@@ -160,6 +160,8 @@ spec:
             if [[ $STEST_STAGE == "destroy" ]]; then
                 KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/destroy_cluster -v=1
             else
-                KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/create_cluster -- -options=../../../options.yaml -v=1
+                # KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/create_cluster -- -options=../../../options.yaml -v=1
             fi
-            cp -r reports ../clc/
+            ls -al 
+            echo "###################"
+            ls -al results/
