@@ -136,7 +136,7 @@ spec:
             chmod 777 options.yaml
             if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
                 clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
-                echo "###clusterName"
+                echo "###clusterName1"
                 echo $clusterName
                 /usr/local/bin/yq e -i '.options.clusters.aws.clusterName="'"$clusterName"'"' options.yaml
                 clusterName=$(yq e '.options.clusters.azure.clusterName' options.yaml)
@@ -145,8 +145,7 @@ spec:
                 /usr/local/bin/yq e -i '.options.clusters.gcp.clusterName="'"$clusterName"'"' options.yaml
                 clusterName=$(yq e '.options.clusters.azgov.clusterName' options.yaml)
                 /usr/local/bin/yq e -i '.options.clusters.azgov.clusterName="'"$clusterName"'"' options.yaml
-                # clusterName='acmqe-ci-konflux'
-                 echo "ClusterName: ###################"
+                echo "ClusterName2: ###################"
                 echo $clusterName
             fi
 
