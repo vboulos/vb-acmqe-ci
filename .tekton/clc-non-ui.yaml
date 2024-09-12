@@ -110,12 +110,20 @@ spec:
           - name: OPTIONS_FILE
             valueFrom:
               secretKeyRef:
-                name: clc-options-yaml-file-2
+                name: clc-options-yaml-file-2-encoded
                 key: CLC_OPTIONS_YAML     
           script: |
             ls -al
             # echo ${OPTIONS_FILE}
-            echo ${OPTIONS_FILE} > options.yaml
+            base64_options_yaml=$(cat "$OPTIONS_FILE")
+
+            # Decode the base64 content
+            decoded_options_yaml=$(echo "$base64_options_yaml" | base64 -d)
+
+            # Save the decoded content to a new file
+            echo "$decoded_options_yaml" > options.yaml
+            
+            # echo ${OPTIONS_FILE} > options.yaml
       
             echo "debug options.yaml"
             # echo ${OPTIONS_FILE}
