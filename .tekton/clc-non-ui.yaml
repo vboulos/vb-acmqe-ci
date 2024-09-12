@@ -115,7 +115,7 @@ spec:
           script: |
             ls -al
             # echo ${OPTIONS_FILE}
-            base64_options_yaml=$(cat "$OPTIONS_FILE")
+            base64_options_yaml=$(cat "${OPTIONS_FILE}")
 
             # Decode the base64 content
             decoded_options_yaml=$(echo "$base64_options_yaml" | base64 -d)
