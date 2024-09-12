@@ -122,7 +122,7 @@ spec:
             ls -al
             shopt -s extglob
             chmod 777 options.yaml
-            yq -I4 options.yaml
+            /usr/local/bin/yq -I4 options.yaml
             cat options.yaml
             if [[ "$TEST_STAGE" == @(all|create|preupgrade|postupgrade|postrelease-create|OCPInterop-create) ]]; then
                 # clusterName=$(yq e '.options.clusters.aws.clusterName' options.yaml)
