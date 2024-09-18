@@ -1,0 +1,95 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: server-foundation-tests
+spec:
+  description: |
+    Server Foundation test suite that provisons managed clusters, ks clusters, cluster pool and many more
+  params:
+    - description: 'Hub OCP API url'
+      name: OCP_HUB_CLUSTER_API_URL
+      default: 'https://api.qe3-vmware-ibm.dev09.red-chesterfield.com:6443'
+      type: string
+    - description: 'Hub OCP username'
+      name: OCP_HUB_CLUSTER_USER
+      default: 'kubeadmin'
+      type: string
+    - description: 'Hub OCP password'
+      name: OCP_HUB_CLUSTER_PASSWORD
+      default: 'sRTjS-4BTuP-2MnDJ-SNnC9'
+      type: string
+    - description: 'The tags when you want to run a subset of tests'
+      name: TEST_TAGS
+      default: 'e2e'
+      type: string
+  tasks:
+    - name: server-foundation-test-suite
+      params:
+        - name: OCP_HUB_CLUSTER_API_URL
+          value: $(params.OCP_HUB_CLUSTER_API_URL)
+        - name: OCP_HUB_CLUSTER_USER
+          value: $(params.OCP_HUB_CLUSTER_USER)
+        - name: OCP_HUB_CLUSTER_PASSWORD
+          value: $(params.OCP_HUB_CLUSTER_PASSWORD)
+        - name: TEST_TAGS
+          value: $(params.TEST_STAGE) 
+      taskSpec:
+        params:
+        - name: OCP_HUB_CLUSTER_API_URL
+        - name: OCP_HUB_CLUSTER_USER
+        - name: OCP_HUB_CLUSTER_PASSWORD
+        - name: TEST_TAGS 
+        steps:
+        - image: quay.io/vboulos/acmqe-automation/server-foundation:main
+          imagePullPolicy: Always
+          env:
+          - name: OCP_HUB_CLUSTER_API_URL
+            value: $(params.OCP_HUB_CLUSTER_API_URL)
+          - name: OCP_HUB_CLUSTER_USER
+            value: $(params.OCP_HUB_CLUSTER_USER)
+          - name: OCP_HUB_CLUSTER_PASSWORD
+            value: $(params.OCP_HUB_CLUSTER_PASSWORD)
+          - name: TEST_TAGS
+            value: $(params.TEST_TAGS) 
+          - name: MY_GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: vincent-secrets
+                key: MY_GITHUB_TOKEN
+          - name: GIT_BRANCH
+            valueFrom:
+              secretKeyRef:
+                name: vincent-secrets
+                key: GIT_BRANCH
+          - name: GITHUB_USER
+            valueFrom:
+              secretKeyRef:
+                name: vincent-secrets
+                key: GITHUB_USER
+          - name: GH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: clc-github-token
+                key: GH_TOKEN    
+          script: |
+            ls -al
+
+            rm -rf ./hub_kubeconfig
+            mkdir -p hub_kubeconfig
+            KUBECONFIG=./hub_kubeconfig/kubeconfig oc login --insecure-skip-tls-verify -u $OCP_HUB_CLUSTER_USER -p $OCP_HUB_CLUSTER_PASSWORD $OCP_HUB_CLUSTER_API_URL
+
+            rm -rf ./spoke_kubeconfig
+            mkdir -p spoke_kubeconfig
+            mkdir -p results
+
+            git config --global url.https://$GH_TOKEN@github.com/stolostron/acmqe-go-library.insteadOf https://github.com/stolostron/acmqe-go-library
+            export JUNIT_REPORT_FILE=\$(pwd)/results/result.xml
+            if [[ $TEST_TAGS == "@post-restore" ]]; then
+                KUBECONFIG=\$(pwd)/hub_kubeconfig/kubeconfig SPOKE_KUBECONFIG=\$(pwd)/spoke_kubeconfig/kubeconfig ginkgo -vv --label-filter="post-restore||e2e" pkg/test
+            else
+                KUBECONFIG=\$(pwd)/hub_kubeconfig/kubeconfig SPOKE_KUBECONFIG=\$(pwd)/spoke_kubeconfig/kubeconfig ginkgo -vv --label-filter=e2e pkg/test
+            fi
+
+            ls -al
+            cd results
+            ls -al
