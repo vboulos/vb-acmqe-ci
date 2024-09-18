@@ -32,7 +32,7 @@ spec:
         - name: OCP_HUB_CLUSTER_PASSWORD
           value: $(params.OCP_HUB_CLUSTER_PASSWORD)
         - name: TEST_TAGS
-          value: $(params.TEST_STAGE) 
+          value: $(params.TEST_TAGS) 
       taskSpec:
         params:
         - name: OCP_HUB_CLUSTER_API_URL
