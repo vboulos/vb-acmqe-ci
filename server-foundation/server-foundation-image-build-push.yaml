@@ -22,14 +22,14 @@ jobs:
             --build-arg MY_GITHUB_TOKEN=${{ secrets.MY_GITHUB_TOKEN }} \
             --build-arg GITHUB_USER=${{ secrets.QUAY_USER }} \
             --build-arg GIT_BRANCH=${{ steps.branch_name.outputs.branch_name }} \
-            -t quay.io/vboulos/acmqe-automation/clc-non-ui:${{ steps.branch_name.outputs.branch_name }} \
-            --file ./clc-non-ui/Dockerfile.clc-non-ui .
+            -t quay.io/vboulos/acmqe-automation/server-foundation:${{ steps.branch_name.outputs.branch_name }} \
+            --file ./server-foundation/Dockerfile.server-foundation .
       - name: Log in to Docker Registry
         run: |
           docker login quay.io -u ${{ secrets.QUAY_USER }} -p ${{ secrets.QUAY_PASSWORD }}
       - name: Push Docker Image
-        run: docker push quay.io/vboulos/acmqe-automation/clc-non-ui:${{ steps.branch_name.outputs.branch_name }}
+        run: docker push quay.io/vboulos/acmqe-automation/server-foundation:${{ steps.branch_name.outputs.branch_name }}
       - name: Verify Image Pushed
         run: |
-          docker pull quay.io/vboulos/acmqe-automation/clc-non-ui:${{ steps.branch_name.outputs.branch_name }}
+          docker pull quay.io/vboulos/acmqe-automation/server-foundation:${{ steps.branch_name.outputs.branch_name }}
           echo "Image pushed successfully!"
