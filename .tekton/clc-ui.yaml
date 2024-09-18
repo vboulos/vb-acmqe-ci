@@ -40,7 +40,7 @@ spec:
       type: string
     - description: 'Browser type (chrome, electron, firefox, edge)'
       name: BROWSER
-      default: 'chrome'
+      default: 'electron'
       type: string
   tasks:
     - name: clc-ui-test-suite
