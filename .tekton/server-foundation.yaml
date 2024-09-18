@@ -4,7 +4,7 @@ metadata:
   name: server-foundation-tests
 spec:
   description: |
-    Server Foundation test suite that provisons managed clusters, ks clusters, cluster pool and many more
+    Server Foundation test suite
   params:
     - description: 'Hub OCP API url'
       name: OCP_HUB_CLUSTER_API_URL
