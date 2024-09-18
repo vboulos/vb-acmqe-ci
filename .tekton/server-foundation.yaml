@@ -83,11 +83,11 @@ spec:
             mkdir -p results
 
             git config --global url.https://$GH_TOKEN@github.com/stolostron/acmqe-go-library.insteadOf https://github.com/stolostron/acmqe-go-library
-            export JUNIT_REPORT_FILE=\$(pwd)/results/result.xml
+            export JUNIT_REPORT_FILE=$(pwd)/results/result.xml
             if [[ $TEST_TAGS == "@post-restore" ]]; then
-                KUBECONFIG=\$(pwd)/hub_kubeconfig/kubeconfig SPOKE_KUBECONFIG=\$(pwd)/spoke_kubeconfig/kubeconfig ginkgo -vv --label-filter="post-restore||e2e" pkg/test
+                KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig SPOKE_KUBECONFIG=$(pwd)/spoke_kubeconfig/kubeconfig ginkgo -vv --label-filter="post-restore||e2e" pkg/test
             else
-                KUBECONFIG=\$(pwd)/hub_kubeconfig/kubeconfig SPOKE_KUBECONFIG=\$(pwd)/spoke_kubeconfig/kubeconfig ginkgo -vv --label-filter=e2e pkg/test
+                KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig SPOKE_KUBECONFIG=$(pwd)/spoke_kubeconfig/kubeconfig ginkgo -vv --label-filter=e2e pkg/test
             fi
 
             ls -al
