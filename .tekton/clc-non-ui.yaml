@@ -157,7 +157,7 @@ spec:
             KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig oc login --insecure-skip-tls-verify -u $OCP_HUB_CLUSTER_USER -p $OCP_HUB_CLUSTER_PASSWORD $OCP_HUB_CLUSTER_API_URL
             set -x
 
-            if [[ $STEST_STAGE == "destroy" ]]; then
+            if [[ $TEST_STAGE == "destroy" ]]; then
                 KUBECONFIG=$(pwd)/hub_kubeconfig/kubeconfig ginkgo --label-filter=$(echo -n $CLOUD_PROVIDERS | sed 's/,/||/g') -p pkg/test/destroy_cluster -v=1
             else
                 echo "create cluster"

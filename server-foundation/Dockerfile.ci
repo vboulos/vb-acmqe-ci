@@ -14,10 +14,10 @@ RUN wget https://github.com/mikefarah/yq/releases/download/v4.13.2/yq_linux_amd6
 # compile go tests in build image
 RUN go install github.com/onsi/ginkgo/v2/ginkgo@v2.20.0
 
-# Copy the CLC non-ui repo into /tmp/clc-non-ui folder
+# Copy the Server Foundation repo into /tmp/server-foundation folder
 RUN mkdir /tmp/serverfoundation
 WORKDIR /tmp/serverfoundation
-# Copy the CLC repo repo into /tmp/clc folder
+# Make the /tmp/serverfoundation folder your working directory
 WORKDIR /tmp/serverfoundation
 RUN echo ${GIT_BRANCH} 
 RUN git clone -b ${GIT_BRANCH} https://oauth2:${MY_GITHUB_TOKEN}@github.com/stolostron/acmqe-foundation-test.git ${GIT_BRANCH}
