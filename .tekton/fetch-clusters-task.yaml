@@ -16,7 +16,7 @@ spec:
       type: string
     - description: 'Hub OCP password'
       name: HUB_OCP_PASSWORD
-      default: 'sRTjS-4BTuP-2MnDJ-SNnC9'
+      default: 'm35Ji-rEbmC-XB4po-fM2hP'
       type: string
   steps:
   - image: quay.io/vboulos/acmqe-automation/fetch-managed-clusters:fetch-v.1.0

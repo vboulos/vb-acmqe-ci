@@ -16,7 +16,7 @@ spec:
       type: string
     - description: 'Hub OCP password'
       name: OCP_HUB_CLUSTER_PASSWORD
-      default: 'sRTjS-4BTuP-2MnDJ-SNnC9'
+      default: 'm35Ji-rEbmC-XB4po-fM2hP'
       type: string
     - description: 'Release branch'
       name: RELEASE_BRANCH
