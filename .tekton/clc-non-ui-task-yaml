@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1 # or tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: clc-non-ui-tests
+  name: clc-non-ui-tests-task
 spec:
   description: |
     Cluster lifecylce non-ui test suite that provisons managed clusters, ks clusters, cluster pool and many more

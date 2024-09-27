@@ -25,7 +25,7 @@ spec:
   tasks:
     - name: fetch-clusters
       taskRef:
-        name: fetch-clusters
+        name: fetch-clusters-task
       params:
         - name: OCP_HUB_CLUSTER_API_URL
           value: $(params.OCP_HUB_CLUSTER_API_URL)
@@ -35,7 +35,7 @@ spec:
           value: $(params.OCP_HUB_CLUSTER_PASSWORD)
     - name: clc-non-ui-tests
       taskRef:
-        name: clc-non-ui-tests
+        name: clc-non-ui-tests-task
       params:
         - name: OCP_HUB_CLUSTER_API_URL
           value: $(params.OCP_HUB_CLUSTER_API_URL)

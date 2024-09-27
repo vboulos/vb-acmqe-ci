@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1 # or tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: fetch-clusters
+  name: fetch-clusters-task
 spec:
   description: |
     Fetch provisoned managed clusters info that are in ready state
