@@ -23,7 +23,7 @@ spec:
       default: 'main'
       type: string
   tasks:
-    - name: fetch-clusters-task
+    - name: fetch-clusters
       taskRef:
         name: fetch-clusters-task
       params:
@@ -33,7 +33,7 @@ spec:
           value: $(params.OCP_HUB_CLUSTER_USER)
         - name: OCP_HUB_CLUSTER_PASSWORD
           value: $(params.OCP_HUB_CLUSTER_PASSWORD)
-    - name: clc-non-ui-tests-task
+    - name: clc-non-ui-tests
       taskRef:
         name: clc-non-ui-tests-task
       params:
