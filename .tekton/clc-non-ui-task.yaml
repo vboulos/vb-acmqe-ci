@@ -8,7 +8,7 @@ spec:
   params:
     - description: 'Hub OCP API url'
       name: OCP_HUB_CLUSTER_API_URL
-      default: 'https://api.qe3-vmware-ibm.dev09.red-chesterfield.com:6443'
+      default: 'https://api.qe1-vmware-ibm.dev09.red-chesterfield.com:6443'
       type: string
     - description: 'Hub OCP username'
       name: OCP_HUB_CLUSTER_USER
@@ -16,7 +16,7 @@ spec:
       type: string
     - description: 'Hub OCP password'
       name: OCP_HUB_CLUSTER_PASSWORD
-      default: 'm35Ji-rEbmC-XB4po-fM2hP'
+      default: 'nTZ9u-UH7Ki-Bkd9v-xEvgq'
       type: string
     - description: 'The spoke public cloud providers you want to provision (aws, gcp, azure)'
       name: CLOUD_PROVIDERS
