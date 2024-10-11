@@ -33,15 +33,15 @@ spec:
           value: $(params.OCP_HUB_CLUSTER_USER)
         - name: OCP_HUB_CLUSTER_PASSWORD
           value: $(params.OCP_HUB_CLUSTER_PASSWORD)
-    # - name: clc-non-ui-tests
-    #   taskRef:
-    #     name: clc-non-ui-tests-task
-    #   params:
-    #     - name: OCP_HUB_CLUSTER_API_URL
-    #       value: $(params.OCP_HUB_CLUSTER_API_URL)
-    #     - name: OCP_HUB_CLUSTER_USER
-    #       value: $(params.OCP_HUB_CLUSTER_USER)
-    #     - name: OCP_HUB_CLUSTER_PASSWORD
-    #       value: $(params.OCP_HUB_CLUSTER_PASSWORD)
-    #     - name: RELEASE_BRANCH
-    #       value: $(params.RELEASE_BRANCH) 
+    - name: clc-non-ui-tests
+      taskRef:
+        name: clc-non-ui-tests-task
+      params:
+        - name: OCP_HUB_CLUSTER_API_URL
+          value: $(params.OCP_HUB_CLUSTER_API_URL)
+        - name: OCP_HUB_CLUSTER_USER
+          value: $(params.OCP_HUB_CLUSTER_USER)
+        - name: OCP_HUB_CLUSTER_PASSWORD
+          value: $(params.OCP_HUB_CLUSTER_PASSWORD)
+        - name: RELEASE_BRANCH
+          value: $(params.RELEASE_BRANCH) 
